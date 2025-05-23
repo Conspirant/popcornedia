@@ -3,38 +3,53 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Popcornedia - Cinematic Excellence</title>
+  <title>Popcornedia - Cinematic Revolution</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Bebas+Neue&display=swap" rel="stylesheet" />
   <link rel="icon" href="https://picsum.photos/32/32" />
   <style>
     body {
-      background: #02020f;
+      background: #010108;
       color: #f1f5f9;
       font-family: 'Poppins', sans-serif;
       min-height: 100vh;
       margin: 0;
       overflow-x: hidden;
+      position: relative;
     }
     .hero {
-      background: linear-gradient(180deg, rgba(2, 2, 15, 0.95), #02020f);
-      background-size: cover;
-      background-position: center;
       position: relative;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       overflow: hidden;
-      animation: fadeIn 2.5s ease-in;
     }
-    .hero::before {
-      content: '';
+    .hero-video {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: brightness(0.5);
+      z-index: -1;
+    }
+    .hero-overlay {
       position: absolute;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
       background: linear-gradient(45deg, #3b82f6, #a855f7, #ec4899, #3b82f6);
-      opacity: 0.2;
-      animation: neonPulse 10s ease infinite;
+      opacity: 0.25;
+      animation: neonPulse 8s ease infinite;
+      z-index: 0;
+    }
+    .hero-content {
+      z-index: 1;
+      text-align: center;
     }
     .parallax {
       transform: translateY(0);
@@ -48,10 +63,12 @@
       transition: transform 0.5s ease, box-shadow 0.5s ease;
       cursor: pointer;
       overflow: hidden;
+      position: relative;
+      transform-style: preserve-3d;
     }
     .movie-card:hover {
-      transform: translateY(-20px) scale(1.05);
-      box-shadow: 0 20px 40px rgba(99, 102, 241, 0.8);
+      transform: rotateY(10deg) rotateX(5deg) scale(1.05);
+      box-shadow: 0 20px 40px rgba(99, 102, 241, 0.9);
     }
     .movie-card img {
       border-radius: 24px 24px 0 0;
@@ -62,7 +79,7 @@
       height: 340px;
     }
     .movie-card:hover img {
-      transform: scale(1.15);
+      transform: scale(1.2);
     }
     .search-container, .filter-container {
       background: rgba(255, 255, 255, 0.2);
@@ -70,6 +87,10 @@
       padding: 0.8rem 1.5rem;
       backdrop-filter: blur(12px);
       border: 1px solid rgba(99, 102, 241, 0.5);
+      transition: transform 0.3s ease;
+    }
+    .search-container:hover, .filter-container:hover {
+      transform: scale(1.05);
     }
     select {
       background: transparent;
@@ -113,7 +134,7 @@
     .load-more-btn:hover, .watchlist-btn:hover, .back-to-top:hover, .trailer-btn:hover, .review-btn:hover {
       background: linear-gradient(45deg, #2563eb, #9333ea);
       transform: scale(1.1);
-      box-shadow: 0 6px 20px rgba(99, 102, 241, 0.7);
+      box-shadow: 0 6px 20px rgba(99, 102, 241, 0.8);
     }
     .modal {
       background: rgba(2, 2, 15, 0.98);
@@ -124,62 +145,87 @@
       overflow-y: auto;
       transform: scale(0.8);
       animation: modalPop 0.4s ease forwards;
+      box-shadow: 0 0 50px rgba(99, 102, 241, 0.5);
     }
     .trending-section, .watchlist-section {
       background: rgba(255, 255, 255, 0.1);
       border-radius: 24px;
       padding: 2.5rem;
       border: 1px solid rgba(99, 102, 241, 0.4);
+      box-shadow: 0 10px 30px rgba(99, 102, 241, 0.3);
     }
     .hero h1 {
       animation: glow 2s ease-in-out infinite alternate;
-      text-shadow: 0 0 25px rgba(99, 102, 241, 0.9);
+      text-shadow: 0 0 30px rgba(99, 102, 241, 1);
+      font-size: 10rem;
     }
     @keyframes glow {
-      from { text-shadow: 0 0 15px #3b82f6, 0 0 25px #a855f7; }
-      to { text-shadow: 0 0 25px #3b82f6, 0 0 35px #ec4899; }
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
+      from { text-shadow: 0 0 20px #3b82f6, 0 0 30px #a855f7; }
+      to { text-shadow: 0 0 30px #3b82f6, 0 0 40px #ec4899; }
     }
     @keyframes neonPulse {
-      0% { opacity: 0.2; }
-      50% { opacity: 0.35; }
-      100% { opacity: 0.2; }
+      0% { opacity: 0.25; }
+      50% { opacity: 0.4; }
+      100% { opacity: 0.25; }
     }
     @keyframes modalPop {
       to { transform: scale(1); }
+    }
+    @keyframes ratingGlow {
+      0% { box-shadow: 0 0 10px rgba(250, 204, 21, 0.5); }
+      50% { box-shadow: 0 0 20px rgba(250, 204, 21, 0.8); }
+      100% { box-shadow: 0 0 10px rgba(250, 204, 21, 0.5); }
+    }
+    @keyframes newReleaseGlow {
+      0% { box-shadow: 0 0 10px rgba(34, 197, 94, 0.5); }
+      50% { box-shadow: 0 0 20px rgba(34, 197, 94, 0.8); }
+      100% { box-shadow: 0 0 10px rgba(34, 197, 94, 0.5); }
     }
     .star-rating .fa-star {
       cursor: pointer;
       transition: color 0.2s ease, transform 0.2s ease;
       color: #6b7280;
-      font-size: 1.2rem;
+      font-size: 1.3rem;
+      margin-right: 0.3rem;
     }
     .star-rating .fa-star:hover, .star-rating .fa-star.active {
       color: #facc15;
-      transform: scale(1.2);
+      transform: scale(1.3);
     }
     .rating-badge {
-      background: rgba(99, 102, 241, 0.2);
-      border: 1px solid rgba(99, 102, 241, 0.5);
+      background: rgba(99, 102, 241, 0.25);
+      border: 1px solid rgba(99, 102, 241, 0.6);
       border-radius: 12px;
-      padding: 0.3rem 0.8rem;
-      font-size: 0.9rem;
+      padding: 0.4rem 1rem;
+      font-size: 0.95rem;
       font-weight: 600;
       color: #f1f5f9;
       display: inline-flex;
       align-items: center;
-      gap: 0.3rem;
-      transition: background 0.3s ease;
+      gap: 0.4rem;
+      transition: background 0.3s ease, transform 0.2s ease;
+    }
+    .rating-badge.rated {
+      animation: ratingGlow 2s ease-in-out infinite;
+    }
+    .rating-badge.new-release {
+      background: rgba(34, 197, 94, 0.25);
+      border: 1px solid rgba(34, 197, 94, 0.6);
+      animation: newReleaseGlow 2s ease-in-out infinite;
     }
     .rating-badge:hover {
-      background: rgba(99, 102, 241, 0.4);
+      background: rgba(99, 102, 241, 0.5);
+      transform: scale(1.05);
+    }
+    .rating-badge.new-release:hover {
+      background: rgba(34, 197, 94, 0.5);
     }
     .rating-badge i {
       color: #facc15;
-      font-size: 0.9rem;
+      font-size: 1rem;
+    }
+    .rating-badge.new-release i {
+      color: #22c55e;
     }
     .review-input {
       background: rgba(255, 255, 255, 0.15);
@@ -203,12 +249,41 @@
       color: #f1f5f9;
       font-size: 0.95rem;
     }
+    #particles-js {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -2;
+    }
+    .holographic {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(45deg, transparent, rgba(99, 102, 241, 0.3), transparent);
+      opacity: 0;
+      transition: opacity 0.4s ease;
+    }
+    .movie-card:hover .holographic {
+      opacity: 1;
+    }
   </style>
 </head>
 <body>
-  <div class="hero py-20 text-center relative parallax" id="heroSection">
-    <h1 class="text-8xl font-bold text-white font-['Bebas_Neue']">Popcornedia</h1>
-    <p class="text-gray-100 mt-5 text-2xl max-w-4xl mx-auto">Experience cinema like never before with real-time movies in every language</p>
+  <div id="particles-js"></div>
+  <div class="hero relative parallax" id="heroSection">
+    <video class="hero-video" autoplay loop muted playsinline>
+      <source src="https://cdn.pixabay.com/video/2024/07/17/220135_tiny.mp4" type="video/mp4">
+      Your browser does not support the video tag.
+    </video>
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <h1 class="font-bold text-white font-['Bebas_Neue']">Popcornedia</h1>
+      <p class="text-gray-100 mt-6 text-3xl max-w-5xl mx-auto">Unleash the future of cinema with real-time movies in every language</p>
+    </div>
   </div>
 
   <div class="container mx-auto px-4">
@@ -258,6 +333,10 @@
       <h2 class="text-5xl font-semibold text-indigo-300 mb-8">Trending Now</h2>
       <div id="trendingContainer" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8"></div>
     </div>
+<div class="trending-section mb-12">
+  <h2 class="text-5xl font-semibold text-indigo-300 mb-8">Upcoming Releases</h2>
+  <div id="upcomingContainer" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8"></div>
+</div>
 
     <div id="loading" class="spinner hidden"></div>
     <div id="movieContainer" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-10 pb-24">
@@ -315,7 +394,26 @@
     </div>
   </div>
 
+  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
   <script>
+    particlesJS('particles-js', {
+      particles: {
+        number: { value: 100, density: { enable: true, value_area: 800 } },
+        color: { value: ['#3b82f6', '#a855f7', '#ec4899'] },
+        shape: { type: 'circle', stroke: { width: 0, color: '#000000' } },
+        opacity: { value: 0.5, random: true, anim: { enable: true, speed: 1, opacity_min: 0.1 } },
+        size: { value: 3, random: true, anim: { enable: true, speed: 2, size_min: 0.1 } },
+        line_linked: { enable: false },
+        move: { enable: true, speed: 2, direction: 'none', random: true, straight: false, out_mode: 'out' }
+      },
+      interactivity: {
+        detect_on: 'canvas',
+        events: { onhover: { enable: true, mode: 'grab' }, onclick: { enable: true, mode: 'push' }, resize: true },
+        modes: { grab: { distance: 140, line_linked: { opacity: 0.5 } }, push: { particles_nb: 4 } }
+      },
+      retina_detect: true
+    });
+
     const API_KEY = '1b253020cf6478198168399c93e7d99e';
     const BASE_URL = 'https://api.themoviedb.org/3';
     const IMG_BASE_URL = 'https://image.tmdb.org/t/p/';
@@ -327,6 +425,7 @@
     let watchlist = JSON.parse(localStorage.getItem("watchlist")) || [];
     let userRatings = JSON.parse(localStorage.getItem("userRatings")) || {};
     let userReviews = JSON.parse(localStorage.getItem("userReviews")) || {};
+    let genresMap = {};
 
     const movieContainer = document.getElementById("movieContainer");
     const trendingContainer = document.getElementById("trendingContainer");
@@ -347,45 +446,167 @@
     const submitReview = document.getElementById("submitReview");
     const reviewsContainer = document.getElementById("reviewsContainer");
 
+    async function fetchWithRetry(url, retries = 3, delay = 1000) {
+      for (let i = 0; i < retries; i++) {
+        try {
+          const response = await fetch(url);
+          if (response.status === 429) {
+            console.warn(`Rate limit hit, retrying (${i + 1}/${retries}) after ${delay}ms`);
+            await new Promise(resolve => setTimeout(resolve, delay));
+            continue;
+          }
+          if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+          return await response.json();
+        } catch (err) {
+          if (i === retries - 1) {
+            console.error(`Failed to fetch ${url}:`, err);
+            return null;
+          }
+        }
+      }
+      return null;
+    }
+
+    async function fetchGenres() {
+      const data = await fetchWithRetry(`${BASE_URL}/genre/movie/list?api_key=${API_KEY}`);
+      if (data?.genres) {
+        data.genres.forEach(genre => {
+          genresMap[genre.id] = genre.name;
+        });
+        console.log("Genres fetched:", genresMap);
+      } else {
+        console.error("Failed to fetch genres");
+        alert("Error loading genres. Check console for details.");
+      }
+    }
+
     async function fetchMovies(page = 1, search = '', language = '', genre = '') {
       try {
-        let url = `${BASE_URL}/discover/movie?api_key=${API_KEY}&page=${page}&sort_by=release_date.desc&release_date.gte=2024-11-23&release_date.lte=2025-05-23&include_adult=false`;
+        const today = new Date().toISOString().split('T')[0];
+let url = `${BASE_URL}/discover/movie?api_key=${API_KEY}&page=${page}&sort_by=release_date.desc&vote_count.gte=5&release_date.lte=${today}&include_adult=false`;
+
+
         if (language) url += `&with_original_language=${language}`;
         if (genre) url += `&with_genres=${genre}`;
         if (search) {
           url = `${BASE_URL}/search/movie?api_key=${API_KEY}&query=${encodeURIComponent(search)}&page=${page}`;
         }
-        const response = await fetch(url);
-        if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
-        const data = await response.json();
-        return data.results;
+        const data = await fetchWithRetry(url);
+        if (!data?.results) {
+          console.error("No movies fetched:", url);
+          return [];
+        }
+        const movies = await Promise.all(data.results.slice(0, moviesPerPage).map(async movie => {
+          const details = await fetchMovieDetails(movie.id);
+          console.log(`Movie ${movie.id} details:`, {
+            vote_average: movie.vote_average,
+            vote_count: movie.vote_count,
+            genres: details?.genres,
+            cast: details?.credits?.cast
+          });
+          return {
+            ...movie,
+            genres: details?.genres || [],
+            genre_ids: movie.genre_ids || [],
+            credits: details?.credits || { cast: [] },
+            vote_average: movie.vote_average ?? details?.vote_average ?? 0,
+            vote_count: movie.vote_count ?? details?.vote_count ?? 0
+          };
+        }));
+        return movies.filter(m => m);
       } catch (err) {
         console.error("Error fetching movies:", err);
+        alert("Failed to load movies. Check console for details.");
         return [];
       }
     }
 
     async function fetchTrending() {
       try {
-        const response = await fetch(`${BASE_URL}/trending/movie/week?api_key=${API_KEY}`);
-        if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
-        const data = await response.json();
-        return data.results.slice(0, 5);
+        const data = await fetchWithRetry(`${BASE_URL}/trending/movie/week?api_key=${API_KEY}`);
+        if (!data?.results) {
+          console.error("No trending movies fetched");
+          return [];
+        }
+        const movies = await Promise.all(data.results.slice(0, 5).map(async movie => {
+          const details = await fetchMovieDetails(movie.id);
+          console.log(`Trending ${movie.id} details:`, {
+            vote_average: movie.vote_average,
+            vote_count: movie.vote_count,
+            genres: details?.genres,
+            cast: details?.credits?.cast
+          });
+          return {
+            ...movie,
+            genres: details?.genres || [],
+            genre_ids: movie.genre_ids || [],
+            credits: details?.credits || { cast: [] },
+            vote_average: movie.vote_average ?? details?.vote_average ?? 0,
+            vote_count: movie.vote_count ?? details?.vote_count ?? 0
+          };
+        }));
+        return movies.filter(m => m);
       } catch (err) {
         console.error("Error fetching trending:", err);
+        alert("Failed to load trending movies. Check console for details.");
         return [];
       }
     }
+	
+async function fetchUpcoming() {
+  const today = new Date().toISOString().split('T')[0];
+  const url = `${BASE_URL}/discover/movie?api_key=${API_KEY}&sort_by=release_date.asc&release_date.gte=${today}&include_adult=false&region=IN`;
+
+  const data = await fetchWithRetry(url);
+  if (!data?.results) {
+    console.error("No upcoming movies fetched");
+    return [];
+  }
+
+  const movies = await Promise.all(data.results.slice(0, 10).map(async movie => {
+    const details = await fetchMovieDetails(movie.id);
+    return {
+      ...movie,
+      genres: details?.genres || [],
+      genre_ids: movie.genre_ids || [],
+      credits: details?.credits || { cast: [] },
+      vote_average: movie.vote_average ?? details?.vote_average ?? 0,
+      vote_count: movie.vote_count ?? details?.vote_count ?? 0
+    };
+  }));
+
+  displayMovies(movies.filter(m => m), false, document.getElementById("upcomingContainer"));
+}
+
 
     async function fetchMovieDetails(id) {
-      try {
-        const response = await fetch(`${BASE_URL}/movie/${id}?api_key=${API_KEY}&append_to_response=credits,videos,reviews`);
-        if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
-        return await response.json();
-      } catch (err) {
-        console.error("Error fetching movie details:", err);
+      const data = await fetchWithRetry(`${BASE_URL}/movie/${id}?api_key=${API_KEY}&append_to_response=credits,videos,reviews`);
+      if (!data) {
+        console.error(`No details for movie ${id}`);
         return null;
       }
+      return data;
+    }
+
+    function formatRating(rating, voteCount, releaseDate) {
+      console.log(`Formatting rating: rating=${rating}, voteCount=${voteCount}, releaseDate=${releaseDate}`);
+      const release = new Date(releaseDate);
+      const today = new Date('2025-05-23');
+      const isRecent = release >= new Date('2024-05-23') && release <= today;
+      if (rating === null || rating === undefined || (rating === 0 && voteCount < 5)) {
+        return isRecent ? "New Release" : "No Rating";
+      }
+      return rating.toFixed(1) + "/10";
+    }
+
+    function getGenres(genreIds, genres = []) {
+      if (genres.length > 0) return genres.map(g => g.name).slice(0, 2).join(", ");
+      if (genreIds.length > 0) return genreIds.map(id => genresMap[id] || "Unknown").slice(0, 2).join(", ");
+      return "N/A";
+    }
+
+    function getCast(cast) {
+      return cast?.slice(0, 2).map(c => c.name).join(", ") || "N/A";
     }
 
     function displayMovies(movies, append = false, container = movieContainer) {
@@ -405,17 +626,26 @@
         movies.forEach(movie => {
           const poster = movie.poster_path ? `${IMG_BASE_URL}w500${movie.poster_path}` : `${FALLBACK_IMG}${movie.id}`;
           const userRating = userRatings[movie.id] ? `${userRatings[movie.id]}/5` : "Not rated";
+          const avgRating = formatRating(movie.vote_average, movie.vote_count, movie.release_date);
+          const isRated = avgRating.endsWith("/10");
+          const isNewRelease = avgRating === "New Release";
+          const genres = getGenres(movie.genre_ids, movie.genres);
+          const cast = getCast(movie.credits?.cast);
+          console.log(`Rendering movie ${movie.id}:`, { avgRating, vote_average: movie.vote_average, vote_count: movie.vote_count, genres, cast, userRating });
           const card = document.createElement("div");
-          card.className = "movie-card rounded-lg overflow-hidden shadow-lg";
+          card.className = "movie-card rounded-lg overflow-hidden shadow-lg relative";
           card.innerHTML = `
+            <div class="holographic"></div>
             <img src="${poster}" alt="${movie.title}" class="w-full h-80 object-cover" loading="lazy" onerror="this.src='${FALLBACK_IMG}${movie.id}'" />
             <div class="p-6">
               <h3 class="text-xl font-semibold truncate">${movie.title}</h3>
               <div class="mt-2 flex gap-2">
-                <span class="rating-badge"><i class="fas fa-star"></i>${(movie.vote_average || 0).toFixed(1)}/10</span>
+                <span class="rating-badge ${isRated ? 'rated' : isNewRelease ? 'new-release' : ''}"><i class="fas fa-star"></i>${avgRating}</span>
                 <span class="rating-badge">You: ${userRating}</span>
               </div>
-              <p class="text-sm text-indigo-300 mt-2">Release: ${movie.release_date || 'N/A'}</p>
+              <p class="text-sm text-indigo-300 mt-2">Genres: ${genres}</p>
+              <p class="text-sm text-indigo-300">Cast: ${cast}</p>
+              <p class="text-sm text-indigo-300">Release: ${movie.release_date || "N/A"}</p>
               <p class="text-sm text-indigo-300">Language: ${movie.original_language.toUpperCase()}</p>
             </div>
           `;
@@ -434,6 +664,7 @@
         if (container === movieContainer) loadMoreBtn.classList.add("hidden");
         isLoading = false;
         loadingSpinner.classList.add("hidden");
+        alert("Error rendering movies. Check console for details.");
       }
     }
 
@@ -442,19 +673,30 @@
       if (!movie) {
         movieModal.innerHTML = `<p class="text-red-400 text-center">Failed to load movie details</p>`;
         movieModal.classList.remove("hidden");
+        alert("No movie details loaded. Check console.");
         return;
       }
 
-      document.getElementById("modalTitle").textContent = movie.title;
+      console.log(`Modal for movie ${id}:`, {
+        vote_average: movie.vote_average,
+        vote_count: movie.vote_count,
+        genres: movie.genres,
+        cast: movie.credits?.cast
+      });
+
+      document.getElementById("modalTitle").textContent = movie.title || "Unknown Title";
       document.getElementById("modalPoster").src = movie.poster_path ? `${IMG_BASE_URL}w500${movie.poster_path}` : `${FALLBACK_IMG}${id}`;
       document.getElementById("modalPoster").onerror = () => { this.src = `${FALLBACK_IMG}${id}`; };
       document.getElementById("modalOverview").textContent = movie.overview || "No overview available";
-      document.getElementById("modalGenres").innerHTML = `<span class="info-label">Genres: </span><span class="info-value">${movie.genres.map(g => g.name).join(", ") || "N/A"}</span>`;
+      document.getElementById("modalGenres").innerHTML = `<span class="info-label">Genres: </span><span class="info-value">${movie.genres?.map(g => g.name).join(", ") || getGenres(movie.genre_ids || [], []) || "N/A"}</span>`;
       document.getElementById("modalRuntime").innerHTML = `<span class="info-label">Runtime: </span><span class="info-value">${movie.runtime ? movie.runtime + " min" : "N/A"}</span>`;
       document.getElementById("modalRelease").innerHTML = `<span class="info-label">Release: </span><span class="info-value">${movie.release_date || "N/A"}</span>`;
-      document.getElementById("modalRating").innerHTML = `<span class="info-label">Average Rating: </span><span class="info-value"><span class="rating-badge"><i class="fas fa-star"></i>${(movie.vote_average || 0).toFixed(1)}/10</span></span>`;
-      document.getElementById("modalCast").innerHTML = `<span class="info-label">Cast: </span><span class="info-value">${movie.credits?.cast.slice(0, 3).map(c => c.name).join(", ") || "N/A"}</span>`;
-      document.getElementById("modalDirector").innerHTML = `<span class="info-label">Director: </span><span class="info-value">${movie.credits?.crew.find(c => c.job === "Director")?.name || "N/A"}</span>`;
+      const avgRating = formatRating(movie.vote_average, movie.vote_count, movie.release_date);
+      const isRated = avgRating.endsWith("/10");
+      const isNewRelease = avgRating === "New Release";
+      document.getElementById("modalRating").innerHTML = `<span class="info-label">Average Rating: </span><span class="info-value"><span class="rating-badge ${isRated ? 'rated' : isNewRelease ? 'new-release' : ''}"><i class="fas fa-star"></i>${avgRating}</span></span>`;
+      document.getElementById("modalCast").innerHTML = `<span class="info-label">Cast: </span><span class="info-value">${movie.credits?.cast?.slice(0, 3).map(c => c.name).join(", ") || "N/A"}</span>`;
+      document.getElementById("modalDirector").innerHTML = `<span class="info-label">Director: </span><span class="info-value">${movie.credits?.crew?.find(c => c.job === "Director")?.name || "N/A"}</span>`;
 
       const trailer = movie.videos?.results.find(v => v.type === "Trailer" && v.site === "YouTube");
       trailerLink.classList.toggle("hidden", !trailer);
@@ -481,16 +723,17 @@
       stars.forEach(star => {
         star.classList.remove("active");
         if (userRatings[id] >= star.dataset.rating) star.classList.add("active");
-        star.addEventListener("click", () => {
+        star.onclick = () => {
           userRatings[id] = parseInt(star.dataset.rating);
           localStorage.setItem("userRatings", JSON.stringify(userRatings));
           stars.forEach(s => s.classList.remove("active"));
           for (let i = 0; i < userRatings[id]; i++) stars[i].classList.add("active");
           loadMovies();
-        });
+        };
       });
 
       userReview.value = "";
+      submitReview.onclick = null;
       submitReview.onclick = () => {
         const reviewText = userReview.value.trim();
         if (reviewText && userRatings[id]) {
@@ -498,6 +741,8 @@
           userReviews[id].push({ user: "You", rating: userRatings[id], text: reviewText });
           localStorage.setItem("userReviews", JSON.stringify(userReviews));
           showMovieDetails(id);
+        } else {
+          alert("Please select a rating and write a review.");
         }
       };
 
@@ -525,12 +770,13 @@
       watchlist.forEach(movie => {
         const poster = movie.poster_path ? `${IMG_BASE_URL}w500${movie.poster_path}` : `${FALLBACK_IMG}${movie.id}`;
         const card = document.createElement("div");
-        card.className = "movie-card rounded-lg overflow-hidden shadow-lg";
+        card.className = "movie-card rounded-lg overflow-hidden shadow-lg relative";
         card.innerHTML = `
+          <div class="holographic"></div>
           <img src="${poster}" alt="${movie.title}" class="w-full h-80 object-cover" loading="lazy" onerror="this.src='${FALLBACK_IMG}${movie.id}'" />
           <div class="p-6">
             <h3 class="text-xl font-semibold truncate">${movie.title}</h3>
-            <button class="watchlist-btn text-white font-semibold py-2 px-4 rounded-full mt-3" onclick="toggleWatchlist({ id: ${movie.id}, title: '${movie.title}', poster_path: '${movie.poster_path}' })">Remove</button>
+            <button class="watchlist-btn text-white font-semibold py-2 px-4 rounded-full mt-3" onclick="toggleWatchlist({ id: ${movie.id}, title: '${movie.title.replace(/'/g, "\\'")}', poster_path: '${movie.poster_path}' })">Remove</button>
           </div>
         `;
         watchlistContainer.appendChild(card);
@@ -555,36 +801,60 @@
       if (movies.length > 0) {
         const movie = movies[Math.floor(Math.random() * movies.length)];
         const backdrop = movie.backdrop_path ? `${IMG_BASE_URL}w1280${movie.backdrop_path}` : `${FALLBACK_IMG}${movie.id}`;
-        heroSection.style.backgroundImage = `linear-gradient(180deg, rgba(2, 2, 15, 0.95), #02020f), url('${backdrop}')`;
+        heroSection.style.backgroundImage = `linear-gradient(180deg, rgba(2, 2, 15, 0.95), #010108), url('${backdrop}')`;
+      } else {
+        console.error("No movies for featured backdrop");
       }
     }
 
-    // Parallax effect
     window.addEventListener("scroll", () => {
       const parallax = document.querySelector(".parallax");
       const offset = window.scrollY;
       parallax.style.transform = `translateY(${offset * 0.3}px)`;
     });
 
-    // Initial load
-    setFeaturedMovie();
-    loadMovies();
-    loadTrending();
-    renderWatchlist();
+    document.addEventListener("click", (e) => {
+      if (e.target.closest(".movie-card")) {
+        particlesJS('particles-js', {
+          particles: {
+            number: { value: 15, density: { enable: false } },
+            color: { value: '#ec4899' },
+            shape: { type: 'circle' },
+            opacity: { value: 0.8, random: true },
+            size: { value: 4, random: true },
+            move: { enable: true, speed: 8, direction: 'none', random: true, straight: false, out_mode: 'out' }
+          },
+          interactivity: { events: { onhover: { enable: false }, onclick: { enable: false } } }
+        });
+        setTimeout(() => {
+          particlesJS.load('particles-js', null);
+        }, 400);
+      }
+    });
 
-    // Language filter event listener
+    fetchGenres().then(() => {
+      setFeaturedMovie();
+      loadMovies();
+      loadTrending();
+      renderWatchlist();
+	  loadTrending();
+fetchUpcoming(); // 👈 add this
+
+    }).catch(err => {
+      console.error("Initial load failed:", err);
+      alert("Failed to initialize app. Check console for details.");
+    });
+
     languageFilter.addEventListener("change", () => {
       currentPage = 1;
       loadMovies();
     });
 
-    // Genre filter event listener
     genreFilter.addEventListener("change", () => {
       currentPage = 1;
       loadMovies();
     });
 
-    // Search functionality with debounce
     let debounceTimeout;
     searchInput.addEventListener("input", () => {
       clearTimeout(debounceTimeout);
@@ -594,13 +864,11 @@
       }, 500);
     });
 
-    // Load more button
     loadMoreBtn.addEventListener("click", () => {
       currentPage++;
       loadMovies(true);
     });
 
-    // Infinite scroll
     window.addEventListener("scroll", () => {
       if (isLoading || loadMoreBtn.classList.contains("hidden")) return;
       if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 100) {
@@ -609,13 +877,11 @@
       }
     });
 
-    // Back to top button
     window.addEventListener("scroll", () => {
       backToTopBtn.classList.toggle("hidden", window.scrollY < 300);
     });
     backToTopBtn.addEventListener("click", () => window.scrollTo({ top: 0, behavior: "smooth" }));
 
-    // Close modal
     closeModalBtn.addEventListener("click", () => movieModal.classList.add("hidden"));
     movieModal.addEventListener("click", e => {
       if (e.target === movieModal) movieModal.classList.add("hidden");
