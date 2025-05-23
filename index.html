@@ -30,8 +30,8 @@
 
   <script>
     const apiKey = "1b253020cf6478198168399c93e7d99e"; // Replace this with your TMDb API key
-    const apiUrl = `https://api.themoviedb.org/3/trending/movie/week?api_key=${apiKey}`;
-    const movieContainer = document.getElementById("movieContainer");
+   const apiUrl = `https://api.themoviedb.org/3/trending/movie/week?api_key=${apiKey}&language=en-US`;
+     const movieContainer = document.getElementById("movieContainer");
 
     async function loadMovies() {
       try {
