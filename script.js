@@ -1,4 +1,4 @@
-const apiKey = "YOUR_API_KEY";
+const apiKey = "1b253020cf6478198168399c93e7d99e";
 const movieContainer = document.querySelector("section");
 
 fetch(`https://api.themoviedb.org/3/movie/popular?api_key=${apiKey}`)
