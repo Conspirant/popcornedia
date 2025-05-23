@@ -1,26 +1,64 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CineVerse</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600&display=swap" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CineScope - Your Movie Hub</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" />
+  <link rel="icon" href="favicon.ico" />
+  <style>
+    .movie-card:hover {
+      transform: scale(1.05);
+      transition: transform 0.3s ease;
+    }
+    body {
+      background: #0f172a;
+      color: white;
+      font-family: 'Segoe UI', sans-serif;
+    }
+  </style>
 </head>
-<body class="bg-gradient-to-br from-gray-900 to-black text-white font-[Montserrat]">
-  <header class="text-center py-10">
-    <h1 class="text-5xl font-bold animate-pulse">🎬 CineVerse</h1>
-    <p class="text-lg mt-2 text-gray-300">Your Next Favorite Movie Awaits</p>
-  </header>
+<body>
+  <div class="text-center py-6">
+    <h1 class="text-4xl font-bold text-indigo-400">🎬 CineScope</h1>
+    <p class="text-gray-400 mt-2">Your free, fast movie hub powered by TMDb</p>
+  </div>
 
-  <section class="p-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-    <!-- Movie Cards: We will generate dynamically using JS + TMDb -->
-    <div class="bg-white bg-opacity-10 backdrop-blur rounded-2xl shadow-lg p-4 animate-fade-in">
-      <img src="https://image.tmdb.org/t/p/w500/8YFL5QQVPy3AgrEQxNYVSgiPEbe.jpg" class="rounded-xl mb-2">
-      <h2 class="text-xl font-bold">Dunki</h2>
-      <p class="text-sm text-gray-300">Rajkumar Hirani | Comedy | 2023</p>
-    </div>
-    <!-- Repeat for now manually -->
-  </section>
+  <div id="movieContainer" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6 px-6 pb-20">
+    <!-- Movies will appear here -->
+  </div>
+
+  <script>
+    const apiKey = "1b253020cf6478198168399c93e7d99e"; // Replace this with your TMDb API key
+    const apiUrl = `https://api.themoviedb.org/3/trending/movie/week?api_key=${apiKey}`;
+    const movieContainer = document.getElementById("movieContainer");
+
+    async function loadMovies() {
+      try {
+        const response = await fetch(apiUrl);
+        const data = await response.json();
+
+        data.results.forEach(movie => {
+          const card = document.createElement("div");
+          card.className = "movie-card bg-gray-800 rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-all";
+
+          card.innerHTML = `
+            <img src="https://image.tmdb.org/t/p/w500${movie.poster_path}" alt="${movie.title}" class="w-full h-72 object-cover" />
+            <div class="p-3">
+              <h3 class="text-lg font-semibold">${movie.title}</h3>
+              <p class="text-sm text-gray-400">⭐ ${movie.vote_average} | 📅 ${movie.release_date}</p>
+            </div>
+          `;
+
+          movieContainer.appendChild(card);
+        });
+      } catch (err) {
+        console.error("Error loading movies:", err);
+        movieContainer.innerHTML = `<p class="text-red-400 text-center">Failed to load movies. Try disabling AdBlock or check your internet.</p>`;
+      }
+    }
+
+    loadMovies();
+  </script>
 </body>
 </html>
