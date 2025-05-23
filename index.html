@@ -3,62 +3,161 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>CineScope - Your Movie Hub</title>
+  <title>CineScope - Your Premium Movie Hub</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" />
   <link rel="icon" href="favicon.ico" />
   <style>
-    .movie-card:hover {
-      transform: scale(1.05);
-      transition: transform 0.3s ease;
-    }
     body {
-      background: #0f172a;
-      color: white;
-      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #1e3a8a 0%, #0f172a 100%);
+      color: #e5e7eb;
+      font-family: 'Poppins', sans-serif;
+      min-height: 100vh;
+      margin: 0;
+      overflow-x: hidden;
+    }
+    .movie-card {
+      background: rgba(31, 41, 55, 0.8);
+      backdrop-filter: blur(10px);
+      border-radius: 12px;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .movie-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
+    }
+    .movie-card img {
+      border-radius: 12px 12px 0 0;
+      transition: opacity 0.3s ease;
+    }
+    .movie-card:hover img {
+      opacity: 0.9;
+    }
+    .search-container {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 50px;
+      padding: 0.5rem 1rem;
+      backdrop-filter: blur(5px);
+    }
+    .spinner {
+      border: 4px solid rgba(255, 255, 255, 0.2);
+      border-left-color: #6366f1;
+      animation: spin 1s linear infinite;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      margin: 2rem auto;
+    }
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #1f2937;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #6366f1;
+      border-radius: 4px;
     }
   </style>
 </head>
 <body>
-  <div class="text-center py-6">
-    <h1 class="text-4xl font-bold text-indigo-400">🎬 CineScope</h1>
-    <p class="text-gray-400 mt-2">Your free, fast movie hub powered by TMDb</p>
-  </div>
+  <div class="container mx-auto px-4">
+    <div class="text-center py-8">
+      <h1 class="text-5xl font-bold text-indigo-400 tracking-tight">
+        <i class="fas fa-film mr-2"></i>CineScope
+      </h1>
+      <p class="text-gray-300 mt-3 text-lg">Discover trending movies from around the world, powered by TMDb</p>
+    </div>
 
-  <div id="movieContainer" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6 px-6 pb-20">
-    <!-- Movies will appear here -->
+    <div class="flex justify-center mb-8">
+      <div class="search-container flex items-center w-full max-w-md">
+        <i class="fas fa-search text-gray-400 mr-3"></i>
+        <input
+          type="text"
+          id="searchInput"
+          placeholder="Search movies..."
+          class="bg-transparent w-full text-white placeholder-gray-400 focus:outline-none"
+        />
+      </div>
+    </div>
+
+    <div id="loading" class="spinner hidden"></div>
+    <div id="movieContainer" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 pb-20">
+      <!-- Movies will appear here -->
+    </div>
   </div>
 
   <script>
     const apiKey = "1b253020cf6478198168399c93e7d99e"; // Replace with your actual API key
-    const apiUrl = `https://api.themoviedb.org/3/trending/movie/week?api_key=${apiKey}&language=en-US`;
+    const apiUrl = `https://api.themoviedb.org/3/trending/movie/week?api_key=${apiKey}`;
+    const searchApiUrl = `https://api.themoviedb.org/3/search/movie?api_key=${apiKey}&query=`;
     const movieContainer = document.getElementById("movieContainer");
+    const searchInput = document.getElementById("searchInput");
+    const loadingSpinner = document.getElementById("loading");
 
-    async function loadMovies() {
+    async function fetchMovies(url) {
       try {
-        const response = await fetch(apiUrl);
+        loadingSpinner.classList.remove("hidden");
+        movieContainer.innerHTML = "";
+        const response = await fetch(url);
         const data = await response.json();
+        loadingSpinner.classList.add("hidden");
+
+        if (data.results.length === 0) {
+          movieContainer.innerHTML = `<p class="text-gray-400 text-center col-span-full">No movies found.</p>`;
+          return;
+        }
 
         data.results.forEach(movie => {
           const card = document.createElement("div");
-          card.className = "movie-card bg-gray-800 rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-all";
+          card.className = "movie-card rounded-lg overflow-hidden shadow-lg";
+          const posterPath = movie.poster_path
+            ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
+            : "https://via.placeholder.com/500x750?text=No+Poster";
+          const title = movie.title || movie.original_title || "Untitled";
+          const releaseDate = movie.release_date || "N/A";
+          const rating = movie.vote_average ? movie.vote_average.toFixed(1) : "N/A";
+          const language = movie.original_language.toUpperCase() || "N/A";
 
           card.innerHTML = `
-            <img src="https://image.tmdb.org/t/p/w500${movie.poster_path}" alt="${movie.title}" class="w-full h-72 object-cover" />
-            <div class="p-3">
-              <h3 class="text-lg font-semibold">${movie.title}</h3>
-              <p class="text-sm text-gray-400">⭐ ${movie.vote_average} | 📅 ${movie.release_date}</p>
+            <img src="${posterPath}" alt="${title}" class="w-full h-80 object-cover" />
+            <div class="p-4">
+              <h3 class="text-lg font-semibold truncate">${title}</h3>
+              <p class="text-sm text-gray-400 mt-1">⭐ ${rating} | 📅 ${releaseDate}</p>
+              <p class="text-sm text-indigo-300">Lang: ${language}</p>
             </div>
           `;
-
           movieContainer.appendChild(card);
         });
       } catch (err) {
         console.error("Error loading movies:", err);
-        movieContainer.innerHTML = `<p class="text-red-400 text-center">Failed to load movies. Try disabling AdBlock or check your internet.</p>`;
+        loadingSpinner.classList.add("hidden");
+        movieContainer.innerHTML = `<p class="text-red-400 text-center col-span-full">Failed to load movies. Try disabling AdBlock or check your internet.</p>`;
       }
     }
 
-    loadMovies();
+    // Load trending movies on page load
+    fetchMovies(apiUrl);
+
+    // Search functionality with debounce
+    let debounceTimeout;
+    searchInput.addEventListener("input", () => {
+      clearTimeout(debounceTimeout);
+      debounceTimeout = setTimeout(() => {
+        const query = searchInput.value.trim();
+        if (query.length > 2) {
+          fetchMovies(searchApiUrl + encodeURIComponent(query));
+        } else {
+          fetchMovies(apiUrl);
+        }
+      }, 500);
+    });
   </script>
 </body>
 </html>
