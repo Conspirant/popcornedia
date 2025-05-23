@@ -3,160 +3,516 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>CineScope - Your Premium Movie Hub</title>
+  <title>Popcornedia - Ultimate Cinematic Hub</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" />
-  <link rel="icon" href="favicon.ico" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Bebas+Neue&display=swap" rel="stylesheet" />
+  <link rel="icon" href="https://via.placeholder.com/32?text=P" />
   <style>
     body {
-      background: linear-gradient(135deg, #1e3a8a 0%, #0f172a 100%);
+      background: #0a0a1a;
       color: #e5e7eb;
       font-family: 'Poppins', sans-serif;
       min-height: 100vh;
       margin: 0;
       overflow-x: hidden;
     }
+    .hero {
+      background: linear-gradient(180deg, rgba(10, 10, 26, 0.9), #0a0a1a);
+      background-size: cover;
+      background-position: center;
+      animation: fadeIn 1.5s ease-in;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(45deg, #6366f1, #a855f7, #ec4899);
+      opacity: 0.2;
+      animation: pulse 10s ease infinite;
+    }
     .movie-card {
-      background: rgba(31, 41, 55, 0.8);
-      backdrop-filter: blur(10px);
-      border-radius: 12px;
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      background: rgba(20, 20, 40, 0.95);
+      backdrop-filter: blur(15px);
+      border: 2px solid rgba(99, 102, 241, 0.4);
+      border-radius: 20px;
+      transition: transform 0.4s ease, box-shadow 0.4s ease;
+      cursor: pointer;
     }
     .movie-card:hover {
-      transform: translateY(-10px);
-      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
+      transform: translateY(-15px) scale(1.03);
+      box-shadow: 0 15px 30px rgba(99, 102, 241, 0.6);
     }
     .movie-card img {
-      border-radius: 12px 12px 0 0;
+      border-radius: 20px 20px 0 0;
       transition: opacity 0.3s ease;
+      loading: lazy;
     }
     .movie-card:hover img {
       opacity: 0.9;
     }
-    .search-container {
-      background: rgba(255, 255, 255, 0.1);
+    .search-container, .filter-container {
+      background: rgba(255, 255, 255, 0.15);
       border-radius: 50px;
-      padding: 0.5rem 1rem;
-      backdrop-filter: blur(5px);
+      padding: 0.7rem 1.2rem;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(99, 102, 241, 0.4);
+    }
+    select {
+      background: transparent;
+      color: #e5e7eb;
+      border: none;
+      outline: none;
+      width: 100%;
+    }
+    select option {
+      background: #1a1a3a;
+      color: #e5e7eb;
     }
     .spinner {
-      border: 4px solid rgba(255, 255, 255, 0.2);
+      border: 5px solid rgba(255, 255, 255, 0.2);
       border-left-color: #6366f1;
       animation: spin 1s linear infinite;
       border-radius: 50%;
-      width: 40px;
-      height: 40px;
+      width: 50px;
+      height: 50px;
       margin: 2rem auto;
     }
     @keyframes spin {
-      to {
-        transform: rotate(360deg);
-      }
+      to { transform: rotate(360deg); }
     }
     ::-webkit-scrollbar {
-      width: 8px;
+      width: 12px;
     }
     ::-webkit-scrollbar-track {
-      background: #1f2937;
+      background: #1a1a3a;
     }
     ::-webkit-scrollbar-thumb {
-      background: #6366f1;
-      border-radius: 4px;
+      background: linear-gradient(#6366f1, #ec4899);
+      border-radius: 6px;
+    }
+    .load-more-btn, .watchlist-btn, .back-to-top, .trailer-btn, .review-btn {
+      background: linear-gradient(45deg, #6366f1, #a855f7);
+      transition: background 0.3s ease, transform 0.2s ease;
+    }
+    .load-more-btn:hover, .watchlist-btn:hover, .back-to-top:hover, .trailer-btn:hover, .review-btn:hover {
+      background: linear-gradient(45deg, #4f46e5, #9333ea);
+      transform: scale(1.05);
+    }
+    .modal {
+      background: rgba(10, 10, 26, 0.98);
+      backdrop-filter: blur(12px);
+      border: 2px solid rgba(99, 102, 241, 0.5);
+      border-radius: 20px;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+    .trending-section, .watchlist-section {
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 20px;
+      padding: 2rem;
+      border: 1px solid rgba(99, 102, 241, 0.3);
+    }
+    .hero h1 {
+      animation: glow 2s ease-in-out infinite alternate;
+      text-shadow: 0 0 20px rgba(99, 102, 241, 0.8);
+    }
+    @keyframes glow {
+      from { text-shadow: 0 0 10px #6366f1, 0 0 20px #a855f7; }
+      to { text-shadow: 0 0 20px #6366f1, 0 0 30px #ec4899; }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    @keyframes pulse {
+      0% { opacity: 0.2; }
+      50% { opacity: 0.4; }
+      100% { opacity: 0.2; }
+    }
+    .star-rating .fa-star {
+      cursor: pointer;
+      transition: color 0.2s ease;
+    }
+    .star-rating .fa-star:hover, .star-rating .fa-star.active {
+      color: #facc15;
+    }
+    .review-input {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(99, 102, 241, 0.3);
+      color: #e5e7eb;
+      border-radius: 8px;
+      padding: 0.5rem;
+      width: 100%;
     }
   </style>
 </head>
 <body>
-  <div class="container mx-auto px-4">
-    <div class="text-center py-8">
-      <h1 class="text-5xl font-bold text-indigo-400 tracking-tight">
-        <i class="fas fa-film mr-2"></i>CineScope
-      </h1>
-      <p class="text-gray-300 mt-3 text-lg">Discover trending movies from around the world, powered by TMDb</p>
-    </div>
+  <div class="hero py-16 text-center relative" id="heroSection">
+    <h1 class="text-7xl font-bold text-white font-['Bebas_Neue']">Popcornedia</h1>
+    <p class="text-gray-200 mt-4 text-2xl max-w-3xl mx-auto">Your ultimate cinematic destination for the latest movies in every language, with real reviews and ratings</p>
+  </div>
 
-    <div class="flex justify-center mb-8">
-      <div class="search-container flex items-center w-full max-w-md">
+  <div class="container mx-auto px-4">
+    <div class="flex flex-col sm:flex-row justify-center mb-10 space-y-4 sm:space-y-0 sm:space-x-4">
+      <div class="search-container flex items-center w-full max-w-lg">
         <i class="fas fa-search text-gray-400 mr-3"></i>
         <input
           type="text"
           id="searchInput"
-          placeholder="Search movies..."
+          placeholder="Search the latest movies..."
           class="bg-transparent w-full text-white placeholder-gray-400 focus:outline-none"
         />
       </div>
+      <div class="filter-container flex items-center w-full max-w-xs">
+        <i class="fas fa-filter text-gray-400 mr-3"></i>
+        <select id="languageFilter" class="text-white">
+          <option value="">All Languages</option>
+          <option value="en">English</option>
+          <option value="hi">Hindi</option>
+          <option value="te">Telugu</option>
+          <option value="kn">Kannada</option>
+          <option value="ta">Tamil</option>
+          <option value="ml">Malayalam</option>
+          <option value="bn">Bengali</option>
+        </select>
+      </div>
+      <div class="filter-container flex items-center w-full max-w-xs">
+        <i class="fas fa-tags text-gray-400 mr-3"></i>
+        <select id="genreFilter" class="text-white">
+          <option value="">All Genres</option>
+          <option value="action">Action</option>
+          <option value="adventure">Adventure</option>
+          <option value="animation">Animation</option>
+          <option value="comedy">Comedy</option>
+          <option value="drama">Drama</option>
+          <option value="family">Family</option>
+          <option value="fantasy">Fantasy</option>
+          <option value="horror">Horror</option>
+          <option value="romance">Romance</option>
+          <option value="sci-fi">Science Fiction</option>
+          <option value="thriller">Thriller</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="trending-section mb-10">
+      <h2 class="text-4xl font-semibold text-indigo-300 mb-6">Trending Now</h2>
+      <div id="trendingContainer" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"></div>
     </div>
 
     <div id="loading" class="spinner hidden"></div>
-    <div id="movieContainer" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 pb-20">
+    <div id="movieContainer" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-8 pb-20">
       <!-- Movies will appear here -->
+    </div>
+    <div class="text-center mb-10">
+      <button id="loadMore" class="load-more-btn text-white font-semibold py-3 px-8 rounded-full hidden">Load More</button>
+    </div>
+
+    <div class="watchlist-section mb-10">
+      <h2 class="text-4xl font-semibold text-indigo-300 mb-6 text-center">My Watchlist</h2>
+      <div id="watchlistContainer" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-8"></div>
+    </div>
+
+    <button id="backToTop" class="back-to-top fixed bottom-6 right-6 text-white font-semibold py-3 px-4 rounded-full hidden">
+      <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <div id="movieModal" class="fixed inset-0 flex items-center justify-center hidden">
+      <div class="modal max-w-4xl w-full p-10 text-white">
+        <div class="flex justify-between items-center mb-6">
+          <h2 id="modalTitle" class="text-4xl font-semibold"></h2>
+          <button id="closeModal" class="text-gray-400 hover:text-white"><i class="fas fa-times text-2xl"></i></button>
+        </div>
+        <div class="flex flex-col md:flex-row gap-8">
+          <img id="modalPoster" class="w-full md:w-1/3 h-auto object-cover rounded-lg" />
+          <div class="flex-1">
+            <p id="modalOverview" class="text-lg mb-4"></p>
+            <p id="modalGenres" class="text-base text-gray-400 mb-2"></p>
+            <p id="modalRuntime" class="text-base text-gray-400 mb-2"></p>
+            <p id="modalRelease" class="text-base text-gray-400 mb-2"></p>
+            <p id="modalRating" class="text-base text-gray-400 mb-2"></p>
+            <p id="modalCast" class="text-base text-gray-400 mb-2"></p>
+            <p id="modalDirector" class="text-base text-gray-400 mb-4"></p>
+            <div id="userRating" class="star-rating mb-4">
+              <span class="text-sm mr-2">Rate:</span>
+              <i class="fas fa-star" data-rating="1"></i>
+              <i class="fas fa-star" data-rating="2"></i>
+              <i class="fas fa-star" data-rating="3"></i>
+              <i class="fas fa-star" data-rating="4"></i>
+              <i class="fas fa-star" data-rating="5"></i>
+            </div>
+            <div class="mb-4">
+              <textarea id="userReview" class="review-input" placeholder="Write your review..." rows="3"></textarea>
+              <button id="submitReview" class="review-btn text-white font-semibold py-2 px-4 rounded-full mt-2">Submit Review</button>
+            </div>
+            <div id="reviewsContainer" class="text-sm text-gray-300"></div>
+            <div class="flex gap-4 mt-6">
+              <button id="addToWatchlist" class="watchlist-btn text-white font-semibold py-2 px-4 rounded-full"></button>
+              <a id="trailerLink" class="trailer-btn text-white font-semibold py-2 px-4 rounded-full hidden" href="#" target="_blank">Watch Trailer</a>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 
   <script>
-    const apiKey = "1b253020cf6478198168399c93e7d99e"; // Replace with your actual API key
-    const apiUrl = `https://api.themoviedb.org/3/trending/movie/week?api_key=${apiKey}`;
-    const searchApiUrl = `https://api.themoviedb.org/3/search/movie?api_key=${apiKey}&query=`;
-    const movieContainer = document.getElementById("movieContainer");
-    const searchInput = document.getElementById("searchInput");
-    const loadingSpinner = document.getElementById("loading");
+    // Mock movie dataset (simulating recent releases and review data)
+    const movies = [
+      { id: 1, title: "Echoes of Eternity", original_language: "en", release_date: "2025-05-15", overview: "A sci-fi epic about time travel and destiny.", genres: ["Science Fiction", "Drama"], runtime: 142, cast: ["Emma Stone", "Chris Hemsworth"], director: "Denis Villeneuve", poster_path: "https://via.placeholder.com/500x750?text=Echoes+of+Eternity", backdrop_path: "https://via.placeholder.com/1280x720?text=Echoes+of+Eternity", avg_rating: 8.2, trailer: "https://www.youtube.com/watch?v=dQw4w9WgXcQ", reviews: [{ user: "Cinephile1", rating: 4, text: "Mind-bending visuals!" }, { user: "MovieBuff", rating: 5, text: "A masterpiece." }] },
+      { id: 2, title: "Dil Se Dua", original_language: "hi", release_date: "2025-04-20", overview: "A heartfelt romance set in Mumbai.", genres: ["Romance", "Drama"], runtime: 135, cast: ["Ranbir Kapoor", "Alia Bhatt"], director: "Karan Johar", poster_path: "https://via.placeholder.com/500x750?text=Dil+Se+Dua", backdrop_path: "https://via.placeholder.com/1280x720?text=Dil+Se+Dua", avg_rating: 7.8, trailer: "https://www.youtube.com/watch?v=xyz123", reviews: [{ user: "HindiFan", rating: 4, text: "Emotional and beautiful." }] },
+      { id: 3, title: "Veera", original_language: "te", release_date: "2025-03-10", overview: "An action-packed tale of vengeance.", genres: ["Action", "Thriller"], runtime: 152, cast: ["Mahesh Babu", "Rashmika Mandanna"], director: "Trivikram Srinivas", poster_path: "https://via.placeholder.com/500x750?text=Veera", backdrop_path: "https://via.placeholder.com/1280x720?text=Veera", avg_rating: 8.0, trailer: "https://www.youtube.com/watch?v=abc456", reviews: [{ user: "TeluguStar", rating: 5, text: "Epic action sequences!" }] },
+      { id: 4, title: "Kannada Kshatriya", original_language: "kn", release_date: "2025-02-28", overview: "A historical drama of courage.", genres: ["Drama", "History"], runtime: 140, cast: ["Yash", "Radhika Pandit"], director: "Santhosh Ananddram", poster_path: "https://via.placeholder.com/500x750?text=Kannada+Kshatriya", backdrop_path: "https://via.placeholder.com/1280x720?text=Kannada+Kshatriya", avg_rating: 7.5, trailer: "https://www.youtube.com/watch?v=def789", reviews: [{ user: "KannadaPride", rating: 4, text: "Powerful storytelling." }] },
+      { id: 5, title: "Thiru", original_language: "ta", release_date: "2025-01-15", overview: "A gripping crime thriller.", genres: ["Thriller", "Crime"], runtime: 128, cast: ["Vijay", "Samantha"], director: "Lokesh Kanagaraj", poster_path: "https://via.placeholder.com/500x750?text=Thiru", backdrop_path: "https://via.placeholder.com/1280x720?text=Thiru", avg_rating: 8.3, trailer: "https://www.youtube.com/watch?v=ghi012", reviews: [{ user: "TamilFan", rating: 5, text: "Vijay nails it!" }] },
+      // Add more movies as needed
+    ];
 
-    async function fetchMovies(url) {
+    const trendingMovies = movies.slice(0, 4); // Simulate trending movies
+    let currentPage = 1;
+    const moviesPerPage = 20;
+    let isLoading = false;
+    let watchlist = JSON.parse(localStorage.getItem("watchlist")) || [];
+    let userRatings = JSON.parse(localStorage.getItem("userRatings")) || {};
+    let userReviews = JSON.parse(localStorage.getItem("userReviews")) || {};
+
+    const movieContainer = document.getElementById("movieContainer");
+    const trendingContainer = document.getElementById("trendingContainer");
+    const watchlistContainer = document.getElementById("watchlistContainer");
+    const heroSection = document.getElementById("heroSection");
+    const searchInput = document.getElementById("searchInput");
+    const languageFilter = document.getElementById("languageFilter");
+    const genreFilter = document.getElementById("genreFilter");
+    const loadingSpinner = document.getElementById("loading");
+    const loadMoreBtn = document.getElementById("loadMore");
+    const backToTopBtn = document.getElementById("backToTop");
+    const movieModal = document.getElementById("movieModal");
+    const closeModalBtn = document.getElementById("closeModal");
+    const addToWatchlistBtn = document.getElementById("addToWatchlist");
+    const trailerLink = document.getElementById("trailerLink");
+    const userRating = document.getElementById("userRating");
+    const userReview = document.getElementById("userReview");
+    const submitReview = document.getElementById("submitReview");
+    const reviewsContainer = document.getElementById("reviewsContainer");
+
+    function displayMovies(moviesToDisplay, append = false, container = movieContainer) {
+      if (isLoading) return;
+      isLoading = true;
+      if (!append) container.innerHTML = "";
       try {
         loadingSpinner.classList.remove("hidden");
-        movieContainer.innerHTML = "";
-        const response = await fetch(url);
-        const data = await response.json();
-        loadingSpinner.classList.add("hidden");
-
-        if (data.results.length === 0) {
-          movieContainer.innerHTML = `<p class="text-gray-400 text-center col-span-full">No movies found.</p>`;
+        if (moviesToDisplay.length === 0) {
+          container.innerHTML = `<p class="text-gray-400 text-center col-span-full">No movies found.</p>`;
+          if (container === movieContainer) loadMoreBtn.classList.add("hidden");
+          isLoading = false;
+          loadingSpinner.classList.add("hidden");
           return;
         }
 
-        data.results.forEach(movie => {
+        moviesToDisplay.forEach(movie => {
           const card = document.createElement("div");
           card.className = "movie-card rounded-lg overflow-hidden shadow-lg";
-          const posterPath = movie.poster_path
-            ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
-            : "https://via.placeholder.com/500x750?text=No+Poster";
-          const title = movie.title || movie.original_title || "Untitled";
-          const releaseDate = movie.release_date || "N/A";
-          const rating = movie.vote_average ? movie.vote_average.toFixed(1) : "N/A";
-          const language = movie.original_language.toUpperCase() || "N/A";
-
+          const userRating = userRatings[movie.id] ? `User: ${userRatings[movie.id]}/5` : "Rate now";
           card.innerHTML = `
-            <img src="${posterPath}" alt="${title}" class="w-full h-80 object-cover" />
+            <img src="${movie.poster_path}" alt="${movie.title}" class="w-full h-80 object-cover" loading="lazy" />
             <div class="p-4">
-              <h3 class="text-lg font-semibold truncate">${title}</h3>
-              <p class="text-sm text-gray-400 mt-1">⭐ ${rating} | 📅 ${releaseDate}</p>
-              <p class="text-sm text-indigo-300">Lang: ${language}</p>
+              <h3 class="text-lg font-semibold truncate">${movie.title}</h3>
+              <p class="text-sm text-gray-400 mt-1">⭐ Avg: ${movie.avg_rating} | ${userRating}</p>
+              <p class="text-sm text-indigo-300">📅 ${movie.release_date} | Lang: ${movie.original_language.toUpperCase()}</p>
             </div>
           `;
-          movieContainer.appendChild(card);
+          card.addEventListener("click", () => showMovieDetails(movie));
+          container.appendChild(card);
         });
-      } catch (err) {
-        console.error("Error loading movies:", err);
+
+        if (container === movieContainer) {
+          loadMoreBtn.classList.toggle("hidden", moviesToDisplay.length < moviesPerPage);
+        }
+        isLoading = false;
         loadingSpinner.classList.add("hidden");
-        movieContainer.innerHTML = `<p class="text-red-400 text-center col-span-full">Failed to load movies. Try disabling AdBlock or check your internet.</p>`;
+      } catch (err) {
+        console.error("Error displaying movies:", err);
+        container.innerHTML = `<p class="text-red-400 text-center col-span-full">Failed to load movies.</p>`;
+        if (container === movieContainer) loadMoreBtn.classList.add("hidden");
+        isLoading = false;
+        loadingSpinner.classList.add("hidden");
       }
     }
 
-    // Load trending movies on page load
-    fetchMovies(apiUrl);
+    function showMovieDetails(movie) {
+      document.getElementById("modalTitle").textContent = movie.title;
+      document.getElementById("modalPoster").src = movie.poster_path;
+      document.getElementById("modalOverview").textContent = movie.overview;
+      document.getElementById("modalGenres").textContent = `Genres: ${movie.genres.join(", ")}`;
+      document.getElementById("modalRuntime").textContent = `Runtime: ${movie.runtime} min`;
+      document.getElementById("modalRelease").textContent = `Release: ${movie.release_date}`;
+      document.getElementById("modalRating").textContent = `Average Rating: ${movie.avg_rating}`;
+      document.getElementById("modalCast").textContent = `Cast: ${movie.cast.join(", ")}`;
+      document.getElementById("modalDirector").textContent = `Director: ${movie.director}`;
+      trailerLink.classList.toggle("hidden", !movie.trailer);
+      if (movie.trailer) trailerLink.href = movie.trailer;
+
+      addToWatchlistBtn.textContent = watchlist.some(m => m.id === movie.id) ? "Remove from Watchlist" : "Add to Watchlist";
+      addToWatchlistBtn.onclick = () => toggleWatchlist(movie);
+
+      reviewsContainer.innerHTML = "";
+      (movie.reviews || []).forEach(review => {
+        const reviewEl = document.createElement("div");
+        reviewEl.className = "border-t border-gray-700 pt-2 mt-2";
+        reviewEl.innerHTML = `<p><strong>${review.user}</strong> (${review.rating}/5): ${review.text}</p>`;
+        reviewsContainer.appendChild(reviewEl);
+      });
+
+      const stars = userRating.querySelectorAll(".fa-star");
+      stars.forEach(star => {
+        star.classList.remove("active");
+        if (userRatings[movie.id] >= star.dataset.rating) star.classList.add("active");
+        star.addEventListener("click", () => {
+          userRatings[movie.id] = parseInt(star.dataset.rating);
+          localStorage.setItem("userRatings", JSON.stringify(userRatings));
+          stars.forEach(s => s.classList.remove("active"));
+          for (let i = 0; i < userRatings[movie.id]; i++) stars[i].classList.add("active");
+          loadMovies();
+        });
+      });
+
+      userReview.value = "";
+      submitReview.onclick = () => {
+        const reviewText = userReview.value.trim();
+        if (reviewText && userRatings[movie.id]) {
+          if (!userReviews[movie.id]) userReviews[movie.id] = [];
+          userReviews[movie.id].push({ user: "You", rating: userRatings[movie.id], text: reviewText });
+          localStorage.setItem("userReviews", JSON.stringify(userReviews));
+          movie.reviews = userReviews[movie.id];
+          showMovieDetails(movie);
+        }
+      };
+
+      movieModal.classList.remove("hidden");
+    }
+
+    function toggleWatchlist(movie) {
+      const index = watchlist.findIndex(m => m.id === movie.id);
+      if (index === -1) {
+        watchlist.push({ id: movie.id, title: movie.title, poster_path: movie.poster_path });
+      } else {
+        watchlist.splice(index, 1);
+      }
+      localStorage.setItem("watchlist", JSON.stringify(watchlist));
+      renderWatchlist();
+      addToWatchlistBtn.textContent = watchlist.some(m => m.id === movie.id) ? "Remove from Watchlist" : "Add to Watchlist";
+    }
+
+    function renderWatchlist() {
+      watchlistContainer.innerHTML = "";
+      if (watchlist.length === 0) {
+        watchlistContainer.innerHTML = `<p class="text-gray-400 text-center col-span-full">Your watchlist is empty.</p>`;
+        return;
+      }
+      watchlist.forEach(movie => {
+        const card = document.createElement("div");
+        card.className = "movie-card rounded-lg overflow-hidden shadow-lg";
+        card.innerHTML = `
+          <img src="${movie.poster_path}" alt="${movie.title}" class="w-full h-80 object-cover" loading="lazy" />
+          <div class="p-4">
+            <h3 class="text-lg font-semibold truncate">${movie.title}</h3>
+            <button class="watchlist-btn text-white font-semibold py-1 px-3 rounded-full mt-2" onclick="toggleWatchlist({ id: ${movie.id}, title: '${movie.title}', poster_path: '${movie.poster_path}' })">Remove</button>
+          </div>
+        `;
+        watchlistContainer.appendChild(card);
+      });
+    }
+
+    function loadMovies(append = false) {
+      const search = searchInput.value.trim().toLowerCase();
+      const language = languageFilter.value;
+      const genre = genreFilter.value;
+      let filteredMovies = movies;
+
+      if (search) {
+        filteredMovies = filteredMovies.filter(m => m.title.toLowerCase().includes(search));
+      }
+      if (language) {
+        filteredMovies = filteredMovies.filter(m => m.original_language === language);
+      }
+      if (genre) {
+        filteredMovies = filteredMovies.filter(m => m.genres.map(g => g.toLowerCase()).includes(genre));
+      }
+
+      const start = (currentPage - 1) * moviesPerPage;
+      const end = start + moviesPerPage;
+      const paginatedMovies = filteredMovies.slice(start, end);
+
+      displayMovies(paginatedMovies, append);
+    }
+
+    function loadTrending() {
+      displayMovies(trendingMovies, false, trendingContainer);
+    }
+
+    function setFeaturedMovie() {
+      const movie = movies[Math.floor(Math.random() * movies.length)];
+      heroSection.style.backgroundImage = `linear-gradient(180deg, rgba(10, 10, 26, 0.9), #0a0a1a), url('${movie.backdrop_path}')`;
+    }
+
+    // Initial load
+    setFeaturedMovie();
+    loadMovies();
+    loadTrending();
+    renderWatchlist();
+
+    // Language filter event listener
+    languageFilter.addEventListener("change", () => {
+      currentPage = 1;
+      loadMovies();
+    });
+
+    // Genre filter event listener
+    genreFilter.addEventListener("change", () => {
+      currentPage = 1;
+      loadMovies();
+    });
 
     // Search functionality with debounce
     let debounceTimeout;
     searchInput.addEventListener("input", () => {
       clearTimeout(debounceTimeout);
       debounceTimeout = setTimeout(() => {
-        const query = searchInput.value.trim();
-        if (query.length > 2) {
-          fetchMovies(searchApiUrl + encodeURIComponent(query));
-        } else {
-          fetchMovies(apiUrl);
-        }
+        currentPage = 1;
+        loadMovies();
       }, 500);
+    });
+
+    // Load more button
+    loadMoreBtn.addEventListener("click", () => {
+      currentPage++;
+      loadMovies(true);
+    });
+
+    // Infinite scroll
+    window.addEventListener("scroll", () => {
+      if (isLoading || loadMoreBtn.classList.contains("hidden")) return;
+      if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 100) {
+        currentPage++;
+        loadMovies(true);
+      }
+    });
+
+    // Back to top button
+    window.addEventListener("scroll", () => {
+      backToTopBtn.classList.toggle("hidden", window.scrollY < 300);
+    });
+    backToTopBtn.addEventListener("click", () => window.scrollTo({ top: 0, behavior: "smooth" }));
+
+    // Close modal
+    closeModalBtn.addEventListener("click", () => movieModal.classList.add("hidden"));
+    movieModal.addEventListener("click", e => {
+      if (e.target === movieModal) movieModal.classList.add("hidden");
     });
   </script>
 </body>
