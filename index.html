@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Popcornedia - Cinematic Universe</title>
+  <title>Popcornedia - Cinematic Excellence</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Bebas+Neue&display=swap" rel="stylesheet" />
   <link rel="icon" href="https://picsum.photos/32/32" />
   <style>
     body {
-      background: #030310;
+      background: #02020f;
       color: #f1f5f9;
       font-family: 'Poppins', sans-serif;
       min-height: 100vh;
@@ -18,7 +18,7 @@
       overflow-x: hidden;
     }
     .hero {
-      background: linear-gradient(180deg, rgba(3, 3, 16, 0.95), #030310);
+      background: linear-gradient(180deg, rgba(2, 2, 15, 0.95), #02020f);
       background-size: cover;
       background-position: center;
       position: relative;
@@ -108,6 +108,7 @@
       background: linear-gradient(45deg, #3b82f6, #a855f7);
       transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
       box-shadow: 0 4px 15px rgba(99, 102, 241, 0.5);
+      border-radius: 9999px;
     }
     .load-more-btn:hover, .watchlist-btn:hover, .back-to-top:hover, .trailer-btn:hover, .review-btn:hover {
       background: linear-gradient(45deg, #2563eb, #9333ea);
@@ -115,7 +116,7 @@
       box-shadow: 0 6px 20px rgba(99, 102, 241, 0.7);
     }
     .modal {
-      background: rgba(3, 3, 16, 0.98);
+      background: rgba(2, 2, 15, 0.98);
       backdrop-filter: blur(15px);
       border: 2px solid rgba(99, 102, 241, 0.7);
       border-radius: 24px;
@@ -153,10 +154,32 @@
     .star-rating .fa-star {
       cursor: pointer;
       transition: color 0.2s ease, transform 0.2s ease;
+      color: #6b7280;
+      font-size: 1.2rem;
     }
     .star-rating .fa-star:hover, .star-rating .fa-star.active {
       color: #facc15;
       transform: scale(1.2);
+    }
+    .rating-badge {
+      background: rgba(99, 102, 241, 0.2);
+      border: 1px solid rgba(99, 102, 241, 0.5);
+      border-radius: 12px;
+      padding: 0.3rem 0.8rem;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: #f1f5f9;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      transition: background 0.3s ease;
+    }
+    .rating-badge:hover {
+      background: rgba(99, 102, 241, 0.4);
+    }
+    .rating-badge i {
+      color: #facc15;
+      font-size: 0.9rem;
     }
     .review-input {
       background: rgba(255, 255, 255, 0.15);
@@ -171,12 +194,21 @@
       border-color: #a855f7;
       outline: none;
     }
+    .info-label {
+      color: #94a3b8;
+      font-size: 0.95rem;
+      font-weight: 500;
+    }
+    .info-value {
+      color: #f1f5f9;
+      font-size: 0.95rem;
+    }
   </style>
 </head>
 <body>
   <div class="hero py-20 text-center relative parallax" id="heroSection">
     <h1 class="text-8xl font-bold text-white font-['Bebas_Neue']">Popcornedia</h1>
-    <p class="text-gray-100 mt-5 text-2xl max-w-4xl mx-auto">Dive into the ultimate cinematic experience with real-time movie data across all languages</p>
+    <p class="text-gray-100 mt-5 text-2xl max-w-4xl mx-auto">Experience cinema like never before with real-time movies in every language</p>
   </div>
 
   <div class="container mx-auto px-4">
@@ -186,7 +218,7 @@
         <input
           type="text"
           id="searchInput"
-          placeholder="Search movies in any language..."
+          placeholder="Search movies in any language"
           class="bg-transparent w-full text-white placeholder-gray-400 focus:outline-none"
         />
       </div>
@@ -254,14 +286,14 @@
           <img id="modalPoster" class="w-full md:w-1/3 h-auto object-cover rounded-lg" />
           <div class="flex-1">
             <p id="modalOverview" class="text-lg mb-6"></p>
-            <p id="modalGenres" class="text-base text-gray-400 mb-3"></p>
-            <p id="modalRuntime" class="text-base text-gray-400 mb-3"></p>
-            <p id="modalRelease" class="text-base text-gray-400 mb-3"></p>
-            <p id="modalRating" class="text-base text-gray-400 mb-3"></p>
-            <p id="modalCast" class="text-base text-gray-400 mb-3"></p>
-            <p id="modalDirector" class="text-base text-gray-400 mb-6"></p>
+            <p id="modalGenres" class="info-label mb-3"><span class="info-value">Genres: </span></p>
+            <p id="modalRuntime" class="info-label mb-3"><span class="info-value">Runtime: </span></p>
+            <p id="modalRelease" class="info-label mb-3"><span class="info-value">Release: </span></p>
+            <p id="modalRating" class="info-label mb-3"><span class="info-value">Average Rating: </span></p>
+            <p id="modalCast" class="info-label mb-3"><span class="info-value">Cast: </span></p>
+            <p id="modalDirector" class="info-label mb-6"><span class="info-value">Director: </span></p>
             <div id="userRating" class="star-rating mb-6">
-              <span class="text-base mr-3">Your Rating:</span>
+              <span class="text-base font-semibold mr-3">Your Rating:</span>
               <i class="fas fa-star" data-rating="1"></i>
               <i class="fas fa-star" data-rating="2"></i>
               <i class="fas fa-star" data-rating="3"></i>
@@ -269,7 +301,7 @@
               <i class="fas fa-star" data-rating="5"></i>
             </div>
             <div class="mb-6">
-              <textarea id="userReview" class="review-input" placeholder="Share your review..." rows="4"></textarea>
+              <textarea id="userReview" class="review-input" placeholder="Write your review" rows="4"></textarea>
               <button id="submitReview" class="review-btn text-white font-semibold py-2 px-6 rounded-full mt-3">Submit Review</button>
             </div>
             <div id="reviewsContainer" class="text-base text-gray-300"></div>
@@ -363,7 +395,7 @@
       try {
         loadingSpinner.classList.remove("hidden");
         if (movies.length === 0) {
-          container.innerHTML = `<p class="text-gray-400 text-center col-span-full">No movies found.</p>`;
+          container.innerHTML = `<p class="text-gray-400 text-center col-span-full">No movies found</p>`;
           if (container === movieContainer) loadMoreBtn.classList.add("hidden");
           isLoading = false;
           loadingSpinner.classList.add("hidden");
@@ -372,15 +404,19 @@
 
         movies.forEach(movie => {
           const poster = movie.poster_path ? `${IMG_BASE_URL}w500${movie.poster_path}` : `${FALLBACK_IMG}${movie.id}`;
-          const userRating = userRatings[movie.id] ? `User: ${userRatings[movie.id]}/5` : "Rate now";
+          const userRating = userRatings[movie.id] ? `${userRatings[movie.id]}/5` : "Not rated";
           const card = document.createElement("div");
           card.className = "movie-card rounded-lg overflow-hidden shadow-lg";
           card.innerHTML = `
             <img src="${poster}" alt="${movie.title}" class="w-full h-80 object-cover" loading="lazy" onerror="this.src='${FALLBACK_IMG}${movie.id}'" />
             <div class="p-6">
               <h3 class="text-xl font-semibold truncate">${movie.title}</h3>
-              <p class="text-sm text-gray-400 mt-2">⭐ Avg: ${(movie.vote_average || 0).toFixed(1)} | ${userRating}</p>
-              <p class="text-sm text-indigo-300 mt-1">📅 ${movie.release_date || 'N/A'} | Lang: ${movie.original_language.toUpperCase()}</p>
+              <div class="mt-2 flex gap-2">
+                <span class="rating-badge"><i class="fas fa-star"></i>${(movie.vote_average || 0).toFixed(1)}/10</span>
+                <span class="rating-badge">You: ${userRating}</span>
+              </div>
+              <p class="text-sm text-indigo-300 mt-2">Release: ${movie.release_date || 'N/A'}</p>
+              <p class="text-sm text-indigo-300">Language: ${movie.original_language.toUpperCase()}</p>
             </div>
           `;
           card.addEventListener("click", () => showMovieDetails(movie.id));
@@ -394,7 +430,7 @@
         loadingSpinner.classList.add("hidden");
       } catch (err) {
         console.error("Error displaying movies:", err);
-        container.innerHTML = `<p class="text-red-400 text-center col-span-full">Failed to load movies. Please refresh.</p>`;
+        container.innerHTML = `<p class="text-red-400 text-center col-span-full">Failed to load movies. Please refresh</p>`;
         if (container === movieContainer) loadMoreBtn.classList.add("hidden");
         isLoading = false;
         loadingSpinner.classList.add("hidden");
@@ -404,7 +440,7 @@
     async function showMovieDetails(id) {
       const movie = await fetchMovieDetails(id);
       if (!movie) {
-        movieModal.innerHTML = `<p class="text-red-400 text-center">Failed to load movie details.</p>`;
+        movieModal.innerHTML = `<p class="text-red-400 text-center">Failed to load movie details</p>`;
         movieModal.classList.remove("hidden");
         return;
       }
@@ -412,13 +448,13 @@
       document.getElementById("modalTitle").textContent = movie.title;
       document.getElementById("modalPoster").src = movie.poster_path ? `${IMG_BASE_URL}w500${movie.poster_path}` : `${FALLBACK_IMG}${id}`;
       document.getElementById("modalPoster").onerror = () => { this.src = `${FALLBACK_IMG}${id}`; };
-      document.getElementById("modalOverview").textContent = movie.overview || "No overview available.";
-      document.getElementById("modalGenres").textContent = `Genres: ${movie.genres.map(g => g.name).join(", ") || "N/A"}`;
-      document.getElementById("modalRuntime").textContent = `Runtime: ${movie.runtime ? movie.runtime + " min" : "N/A"}`;
-      document.getElementById("modalRelease").textContent = `Release: ${movie.release_date || "N/A"}`;
-      document.getElementById("modalRating").textContent = `Average Rating: ${(movie.vote_average || 0).toFixed(1)}`;
-      document.getElementById("modalCast").textContent = `Cast: ${movie.credits?.cast.slice(0, 3).map(c => c.name).join(", ") || "N/A"}`;
-      document.getElementById("modalDirector").textContent = `Director: ${movie.credits?.crew.find(c => c.job === "Director")?.name || "N/A"}`;
+      document.getElementById("modalOverview").textContent = movie.overview || "No overview available";
+      document.getElementById("modalGenres").innerHTML = `<span class="info-label">Genres: </span><span class="info-value">${movie.genres.map(g => g.name).join(", ") || "N/A"}</span>`;
+      document.getElementById("modalRuntime").innerHTML = `<span class="info-label">Runtime: </span><span class="info-value">${movie.runtime ? movie.runtime + " min" : "N/A"}</span>`;
+      document.getElementById("modalRelease").innerHTML = `<span class="info-label">Release: </span><span class="info-value">${movie.release_date || "N/A"}</span>`;
+      document.getElementById("modalRating").innerHTML = `<span class="info-label">Average Rating: </span><span class="info-value"><span class="rating-badge"><i class="fas fa-star"></i>${(movie.vote_average || 0).toFixed(1)}/10</span></span>`;
+      document.getElementById("modalCast").innerHTML = `<span class="info-label">Cast: </span><span class="info-value">${movie.credits?.cast.slice(0, 3).map(c => c.name).join(", ") || "N/A"}</span>`;
+      document.getElementById("modalDirector").innerHTML = `<span class="info-label">Director: </span><span class="info-value">${movie.credits?.crew.find(c => c.job === "Director")?.name || "N/A"}</span>`;
 
       const trailer = movie.videos?.results.find(v => v.type === "Trailer" && v.site === "YouTube");
       trailerLink.classList.toggle("hidden", !trailer);
@@ -431,13 +467,13 @@
       (movie.reviews?.results || []).slice(0, 3).forEach(review => {
         const reviewEl = document.createElement("div");
         reviewEl.className = "border-t border-gray-700 pt-3 mt-3";
-        reviewEl.innerHTML = `<p><strong>${review.author}</strong> (${review.author_details?.rating || "N/A"}/10): ${review.content.substring(0, 200)}...</p>`;
+        reviewEl.innerHTML = `<p><strong>${review.author}</strong> (Rating: ${review.author_details?.rating || "N/A"}/10): ${review.content.substring(0, 200)}...</p>`;
         reviewsContainer.appendChild(reviewEl);
       });
       (userReviews[id] || []).forEach(review => {
         const reviewEl = document.createElement("div");
         reviewEl.className = "border-t border-gray-700 pt-3 mt-3";
-        reviewEl.innerHTML = `<p><strong>${review.user}</strong> (${review.rating}/5): ${review.text}</p>`;
+        reviewEl.innerHTML = `<p><strong>${review.user}</strong> (Rating: ${review.rating}/5): ${review.text}</p>`;
         reviewsContainer.appendChild(reviewEl);
       });
 
@@ -483,7 +519,7 @@
     function renderWatchlist() {
       watchlistContainer.innerHTML = "";
       if (watchlist.length === 0) {
-        watchlistContainer.innerHTML = `<p class="text-gray-400 text-center col-span-full">Your watchlist is empty.</p>`;
+        watchlistContainer.innerHTML = `<p class="text-gray-400 text-center col-span-full">Your watchlist is empty</p>`;
         return;
       }
       watchlist.forEach(movie => {
@@ -519,7 +555,7 @@
       if (movies.length > 0) {
         const movie = movies[Math.floor(Math.random() * movies.length)];
         const backdrop = movie.backdrop_path ? `${IMG_BASE_URL}w1280${movie.backdrop_path}` : `${FALLBACK_IMG}${movie.id}`;
-        heroSection.style.backgroundImage = `linear-gradient(180deg, rgba(3, 3, 16, 0.95), #030310), url('${backdrop}')`;
+        heroSection.style.backgroundImage = `linear-gradient(180deg, rgba(2, 2, 15, 0.95), #02020f), url('${backdrop}')`;
       }
     }
 
